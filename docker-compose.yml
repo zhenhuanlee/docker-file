@@ -1,0 +1,32 @@
+app:
+  # build: ./acx
+  image: tag:2
+  container_name: acx_app
+  ports:
+    - "3000:3000"
+  environment: 
+    RACK_ENV: development
+    RAILS_ENV: development
+  command: bundle exec rake db:create
+  command: bundle exec rake db:migrate
+  links: 
+    - db
+    - redis
+
+db:
+  image: mysql
+  container_name: mysql
+  restart: always
+  environment:
+    MYSQL_ROOT_PASSWORD: 123456
+  volumes:
+    - dbdata:/home/jude/data/mysql
+  
+redis:
+  image: redis
+  container_name: redis
+  restart: always
+  volumes:
+    - redisData:/home/jude/data/redis
+
+# rabbitmq:
